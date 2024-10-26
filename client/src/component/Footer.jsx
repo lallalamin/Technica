@@ -9,6 +9,7 @@ export default function Footer() {
         <AppBar position="static" className="nav-bar" sx={{ backgroundColor:'white'}}>
             <Toolbar className="tool-bar">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img src="\favicon_io\android-chrome-192x192.png" width="50px" alt='logo'></img>
                     <Typography className="logo-title" component="a" href="/" variant="h6" sx={{  textDecoration: 'none', color: 'black', paddingLeft: '10px', fontWeight: 'bold'}}>
                         FinTechstic
                     </Typography>
