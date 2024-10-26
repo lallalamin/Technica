@@ -21,7 +21,7 @@ const budgetItems = [
   { label: 'List Item', amount: '$100+' },
 ];
 
-const progressValue = 70;
+const progressValue = 20;
 
 function Dashboard() {
   return (
