@@ -1,3 +1,32 @@
 body{
   background-color: #E9EFFD;
 }
+
+.tool-bar{
+  display: flex;
+  justify-content: space-between;
+}
+
+.legal-stuff{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.footer-right{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.social-media{
+  display: flex;
+  justify-content: space-around; 
+  width: 10%;
+}
+
+.icon-black {
+  color: black;
+  font-size: 30px;
+}

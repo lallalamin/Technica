@@ -1,4 +1,4 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -9,7 +9,7 @@ export default function Footer() {
         <AppBar position="static" className="nav-bar" sx={{ backgroundColor:'white'}}>
             <Toolbar className="tool-bar">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography className="logo-title" component="a" href="/" variant="h6" sx={{  textDecoration: 'none', color: 'black', paddingLeft: '10px'}}>
+                    <Typography className="logo-title" component="a" href="/" variant="h6" sx={{  textDecoration: 'none', color: 'black', paddingLeft: '10px', fontWeight: 'bold'}}>
                         FinTechstic
                     </Typography>
                 </div>

@@ -4,7 +4,7 @@ const NavigationBar = () => {
   return (
     <AppBar position="static" className="nav-bar" sx={{ backgroundColor:'white'}}>
             <Toolbar className="tool-bar">
-                <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center'}}>
                     <Typography className="logo-title" component="a" href="/" variant="h6" sx={{  textDecoration: 'none', color: 'black', paddingLeft: '10px', fontWeight: 'bold'}}>
                         FinTechstic
                     </Typography>
