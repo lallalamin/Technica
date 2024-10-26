@@ -3,6 +3,7 @@ import React from 'react';
 import { Grid, Card, CardContent, Typography, Button, Box, List, ListItem} from '@mui/material';
 import PieChart from './piechart';
 import DailyTip from '../component/DailyTip';
+import ProgressBar from '../component/ProgressBar';
 
 const data = [
   { name: 'Food', value: 9 },
@@ -20,12 +21,16 @@ const budgetItems = [
   { label: 'List Item', amount: '$100+' },
 ];
 
+const progressValue = 70;
+
 function Dashboard() {
   return (
-    <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh'}}>
+    <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh', maxWidth: '100%'}}>
+      {/* Progress Bar Section */}  
+      <ProgressBar value={progressValue} goal={100} />
+
       {/* Daily Tip Section */}
       <DailyTip />
-
       <Grid container spacing={3}>
         {/* Budget Tracking Section */}
         <Grid item xs={12} md={6}>

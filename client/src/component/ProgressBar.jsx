@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, LinearProgress, Typography } from '@mui/material';
-import StarIcon from '@mui/icons-material/Star';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 function CustomProgressBar({ value, goal }) {
   return (
@@ -15,7 +15,7 @@ function CustomProgressBar({ value, goal }) {
           sx={{
             height: '20px',
             borderRadius: '10px',
-            backgroundColor: '#f5f5f5',
+            backgroundColor: 'white',
             flexGrow: 1,
             '& .MuiLinearProgress-bar': {
               backgroundColor: '#FFBB28', // Customize the progress color
@@ -23,7 +23,7 @@ function CustomProgressBar({ value, goal }) {
           }}
         />
         <Box sx={{ position: 'absolute', right: '-30px', display: 'flex', alignItems: 'center' }}>
-          <StarIcon sx={{ color: 'black' }} />
+          <EmojiEventsIcon sx={{ color: 'black' }} />
           <Typography variant="body2" sx={{ marginLeft: '5px' }}>
             Goal
           </Typography>
@@ -32,3 +32,5 @@ function CustomProgressBar({ value, goal }) {
     </Box>
   );
 }
+
+export default CustomProgressBar;
