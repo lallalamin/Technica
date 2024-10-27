@@ -6,6 +6,7 @@ import ProgressBar from '../component/ProgressBar';
 import AddBudgetDialog from '../component/AddBudgetDialog';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { useNavigate } from 'react-router-dom';
+import { useAuthInfo, useRedirectFunctions } from '@propelauth/react';
 
 const progressValue = 0;
 
@@ -14,9 +15,19 @@ function Dashboard() {
     const [budgetItems, setBudgetItems] = useState([]);
     const [chartData, setChartData] = useState([]);
     const [totalIncome, setTotalIncome] = useState(0);
+    const [userId, setUserId] = useState(null);
 
-    const hardcodedUserId = '12345';
+    const { redirectToLoginPage } = useRedirectFunctions();
+    const { user } = useAuthInfo();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (user) {
+            setUserId(user.userId);
+        } else if (user === null) {
+            redirectToLoginPage();
+        }
+    }, [user]);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -27,9 +38,10 @@ function Dashboard() {
     };
 
     const handleAddBudgetItem = async (newItem) => {
+        if (!userId) return;  
         const itemWithUserId = {
             ...newItem,
-            user_id: hardcodedUserId,
+            user_id: userId,
         };
 
         try {
@@ -56,7 +68,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchStatements = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/statements/${hardcodedUserId}`);
+                const response = await fetch(`http://localhost:5000/api/statements/${userId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -70,7 +82,7 @@ function Dashboard() {
         };
 
         fetchStatements();
-    }, []);
+    }, [userId]);
 
     const updateChartData = (items) => {
         // Calculate totals for each type
