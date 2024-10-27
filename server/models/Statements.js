@@ -9,15 +9,15 @@ const StatementsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category: {
+    category: { // Food, Gas, Electricity, Rent, etc. - Expense | Income - Income
         type: String,
         required: true
     },
-    type: {
+    type: { // Expense or Income or Savings
         type: String,
         required: true
     },
-    amount: {
+    amount: { // 
         type: Number,
         required: true
     },

@@ -27,6 +27,45 @@ const getStatementsFromUser = async (req, res) => {
     }
 }
 
+const getStatementsFromUserInAMonth = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const now = new Date();
+        const start_date = new Date(now.getFullYear(), now.getMonth(), 1); 
+        const end_date = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999); 
+
+        const userStatements = await statements.find({ 
+            user_id, 
+            date: { $gte: start_date, $lte: end_date } 
+        });
+
+        return res.status(200).json(userStatements);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
+const getStatementsFromUserAndTypeInAMonth = async (req, res) => {
+    try {
+        const { user_id } = req.params;
+
+        const now = new Date();
+        const start_date = new Date(now.getFullYear(), now.getMonth(), 1); 
+        const end_date = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999); 
+
+        const userStatements = await statements.find({ 
+            user_id, 
+            date: { $gte: start_date, $lte: end_date },
+            type: req.params.type
+        });
+        
+        return res.status(200).json(userStatements);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 const getStatementsFromUserAndType = async (req, res) => {
     try {
         const filteredStatements = await statements.find({ user_id: req.params.user_id, type: req.params.type });
@@ -65,4 +104,12 @@ const deleteStatement = async (req, res) => {
     }
 }
 
-export default { addStatement, getStatementsFromUser, getStatementsFromUserAndType, updateStatement, deleteStatement };
+export default { 
+    addStatement, 
+    getStatementsFromUser, 
+    getStatementsFromUserAndType, 
+    getStatementsFromUserInAMonth,
+    getStatementsFromUserAndTypeInAMonth,
+    updateStatement, 
+    deleteStatement 
+};
