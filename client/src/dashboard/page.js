@@ -132,7 +132,7 @@ function Dashboard() {
     };
 
     return (
-        <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh', maxWidth: '100%' }}>
+        <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '90vh', maxWidth: '100%' }}>
             <Button 
                 sx={{ 
                     display: 'flex', 
@@ -152,12 +152,12 @@ function Dashboard() {
 
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', maxHeight: '400px' }}>
-                        <CardContent>
+                    <Card sx={{ boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', minHeight: '400px' }}>
+                        <CardContent sx={{height: '400px', margin: 'auto'}}>
                             <Typography variant="h6" sx={{ textAlign: 'center', backgroundColor: '#E6E6FA', padding: '10px' }}>
                                 Budget Track
                             </Typography>
-                            <Box sx={{ padding: '20px', maxHeight: '200px', overflow: 'auto' }}>
+                            <Box sx={{ padding: '20px', maxHeight: '280px', minHeight: '250px', overflow: 'auto' }}>
                                 <List>
                                     {budgetItems.map((item, index) => (
                                         <ListItem key={index} disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -177,7 +177,7 @@ function Dashboard() {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleClickOpen}
-                                sx={{ display: 'block', margin: '20px auto', backgroundColor: '#2E46CD', '&:hover': { backgroundColor: '#1E3AA1' } }}
+                                sx={{ display: 'block', margin: 'auto', backgroundColor: '#2E46CD', '&:hover': { backgroundColor: '#1E3AA1' } }}
                             >
                                 Add
                             </Button>
@@ -185,7 +185,7 @@ function Dashboard() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Card sx={{ padding: '20px', textAlign: 'center', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
+                    <Card sx={{ padding: '20px', textAlign: 'center', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)', minHeight: '400px' }}>
                         <Typography variant="h6" gutterBottom>
                             Your Monthly Budget Distribution
                         </Typography>
