@@ -6,8 +6,10 @@ import PieChart from './piechart';
 import DailyTip from '../component/DailyTip';
 import ProgressBar from '../component/ProgressBar';
 import AddBudgetDialog from '../component/AddBudgetDialog';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { useNavigate } from 'react-router-dom';
 
-const progressValue = 20;
+const progressValue = 0;
 
 function Dashboard() {
     const [open, setOpen] = useState(false);
@@ -15,6 +17,7 @@ function Dashboard() {
     const [chartData, setChartData] = useState([]);
 
     const hardcodedUserId = '12345'; // Hardcoded user ID for development
+	const navigate = useNavigate();
 
     // Handle opening the dialog
     const handleClickOpen = () => {
@@ -94,6 +97,10 @@ function Dashboard() {
 
     return (
         <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh', maxWidth: '100%' }}>
+			<Button sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px auto', backgroundColor: '#2E46CD', color: 'white', '&:hover': { backgroundColor: '#1E3AA1' } }}
+			onClick={() => navigate('/form')}>
+				<AutoAwesomeIcon sx={{ marginRight: '5px', color: 'yellow' }} /> Add Goal
+			</Button>
             <ProgressBar value={progressValue} goal={100} />
             <DailyTip />
 

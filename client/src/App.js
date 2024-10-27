@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-route
 import NavigationBar from './component/NavigationBar';
 import Footer from './component/Footer';
 import Dashboard from './dashboard/page';
+import Form from './form/page';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/form" element={<Form />} />
         </Routes>
         <Footer />
       </div>
