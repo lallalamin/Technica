@@ -1,4 +1,5 @@
 import plan from '../models/Plan.js'; // this is your MongoDB model 
+import { handleAIResponse } from '../routes/generatePlan.js';
 
 const getPlanFromUser = async (req, res) => {
     try {
@@ -11,6 +12,7 @@ const getPlanFromUser = async (req, res) => {
 
 const addPlan = async (req, res) => {
     try {
+        const generatedPlan = await handleAIResponse(req);
         const newPlan = await plan.create({
             user_id: req.body.user_id,
             goal: req.body.goal,
@@ -18,7 +20,7 @@ const addPlan = async (req, res) => {
             timeFrame: req.body.timeFrame,
             income: req.body.income,
             currentSavings: req.body.currentSavings,
-            generatedPlan: req.body.generatedPlan,
+            generatedPlan: generatedPlan,
             dateCreated: req.body.dateCreated,
         });
         return res.status(200).json(newPlan);
