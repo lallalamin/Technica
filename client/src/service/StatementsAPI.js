@@ -66,7 +66,7 @@ const handleResponse = async (response) => {
   
   export const updateStatement = async (id, statementData) => {
     try {
-      const response = await fetch(`${baseUrl}/api/statement/${id}`, {
+      const response = await fetch(`${baseUrl}/api/statements/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -82,7 +82,7 @@ const handleResponse = async (response) => {
   
   export const deleteStatement = async (id) => {
     try {
-      const response = await fetch(`${baseUrl}/api/statement/${id}`, {
+      const response = await fetch(`${baseUrl}/api/statements/${id}`, {
         method: "DELETE",
       });
       return handleResponse(response);

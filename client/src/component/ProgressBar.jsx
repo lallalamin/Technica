@@ -23,7 +23,7 @@ function CustomProgressBar({ value, goal }) {
       };
 
   return (
-    <Box sx={{ width: '100%', padding: '20px', textAlign: 'center', backgroundColor: '#f0f4fa', borderRadius: '10px' }}>
+    <Box sx={{ width: '100%', marginBottom: '20px', textAlign: 'center', backgroundColor: '#f0f4fa', borderRadius: '10px' }}>
       <Typography variant="body1" gutterBottom>
         {getProgressMessage()}
       </Typography>
