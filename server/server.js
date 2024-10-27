@@ -1,8 +1,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import statementsRouter from './routes/statements.js';
 import Connection from './database/db.js';
+import statementsRouter from './routes/statements.js';
+import planRouter from './routes/plan.js';
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ Connection();
 
 // Use routes
 app.use('/api/statements', statementsRouter);
+app.use('/api/plan', planRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
