@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { useAuthInfo, useRedirectFunctions } from '@propelauth/react';
 import NavigationBar from './component/NavigationBar';
 import Footer from './component/Footer';
 import Dashboard from './dashboard/page';
@@ -25,6 +26,16 @@ function App() {
 
 function HomePage() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuthInfo();
+  const { redirectToLoginPage } = useRedirectFunctions();
+
+  const handleGetStartedClick = () => {
+    if (isLoggedIn) {
+      navigate('/dashboard');
+    } else {
+      redirectToLoginPage();
+    }
+  };
 
   return (
     <div id='header' style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '80px' }}>
@@ -48,7 +59,7 @@ function HomePage() {
           variant="contained"
           color="primary"
           sx={{ mt: 2, mr: 2, backgroundColor: 'white', color: 'black', fontWeight: 600, borderRadius: '10px', padding: '5px 15px', marginLeft: '10px', '&:hover': { backgroundColor: '#e2e2e2' } }}
-          onClick={() => navigate('/dashboard')}
+          onClick={handleGetStartedClick}
         >
           Get Started
         </Button>
