@@ -1,5 +1,6 @@
 body{
   background-color: #E9EFFD;
+  overflow-x: hidden;
 }
 
 .tool-bar{
