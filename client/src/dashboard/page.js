@@ -19,6 +19,7 @@ function Dashboard() {
     const [chartData, setChartData] = useState([]);
     const [totalIncome, setTotalIncome] = useState(0);
     const [userId, setUserId] = useState(null);
+    const [plan, setPlan] = useState(null);
 
     const { redirectToLoginPage } = useRedirectFunctions();
     const { user } = useAuthInfo();
@@ -82,9 +83,24 @@ function Dashboard() {
             console.error("Error fetching statements:", error);
         }
     };
+    const fetchPlan = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/plan/${hardcodedUserId}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const fetchedPlan = await response.json();
+            if (fetchedPlan.length > 0) {
+                setPlan(fetchedPlan[0]); // Set the first item in the array as the plan
+            }
+        } catch (error) {
+            console.error("Error fetching plan:", error);
+        }
+    };
 
     useEffect(() => {
         fetchStatements();
+        fetchPlan();
     }, [userId]);
 
     const updateChartData = (items) => {
@@ -198,6 +214,14 @@ function Dashboard() {
         }
     };
 
+    const calculateProgress = () => {
+        if (plan && plan.targetAmount > 0) {
+            const progress = (plan.currentSavings / plan.targetAmount) * 100;
+            return Math.min(progress, 100); // Ensure progress does not exceed 100%
+        }
+        return 0;
+    };
+
     return (
         <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '90vh', maxWidth: '100%' }}>
             <Button 
@@ -214,7 +238,13 @@ function Dashboard() {
             >
                 <AutoAwesomeIcon sx={{ marginRight: '5px', color: 'yellow' }} /> Add Goal
             </Button>
-            <ProgressBar value={progressValue} goal={100} />
+            <ProgressBar
+				value={calculateProgress()} // Use the calculated progress percentage
+				goal={100}
+				purpose={plan?.goal || ''}
+				targetAmount={plan?.targetAmount || 0} // Pass the targetAmount from plan
+				currentSavings={plan?.currentSavings || 0} // Pass the currentSavings from plan
+				/>
             <DailyTip />
 
             <Grid container spacing={3}>

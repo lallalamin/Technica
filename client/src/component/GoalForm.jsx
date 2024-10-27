@@ -1,4 +1,4 @@
-// src/components/AddGoalForm.js
+// src/components/GoalForm.js
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 
@@ -18,7 +18,7 @@ function GoalForm({ onSubmit }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    onSubmit(formData); // Pass formData to the parent component via onSubmit prop
   };
 
   return (
@@ -75,16 +75,6 @@ function GoalForm({ onSubmit }) {
       />
       <TextField
         label="Current Savings ($)"
-        name="currentSavings"
-        type="number"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        value={formData.currentSavings}
-        onChange={handleChange}
-      />
-      <TextField
-        label="Monthly Expenses ($)"
         name="currentSavings"
         type="number"
         variant="outlined"
