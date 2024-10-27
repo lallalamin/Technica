@@ -62,7 +62,7 @@ function AddBudgetDialog({ open, onClose, onSubmit }) {
                     onChange={handleChange}
                     required
                 >
-                    {['Food', 'Gas', 'Electricity', 'Rent', 'Income'].map((option) => (
+                    {['Food', 'Gas', 'Electricity', 'Rent', 'Income', 'Internet', 'Water', 'Insurance', 'Transportation', 'Entertainment', 'Healthcare', 'Savings'].map((option) => (
                         <MenuItem key={option} value={option}>
                             {option}
                         </MenuItem>

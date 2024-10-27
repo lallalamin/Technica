@@ -1,25 +1,18 @@
 // src/dashboard/page.js
 import React, { useEffect, useState } from 'react';
 import { Grid, Card, CardContent, Typography, Button, Box, List, ListItem } from '@mui/material';
-import { addStatement, getStatementsFromUser } from '../service/StatementsAPI'; // Import the addStatement function
+//import { addStatement, getStatementsFromUser } from '../service/StatementsAPI'; // Import the addStatement function
 import PieChart from './piechart';
 import DailyTip from '../component/DailyTip';
 import ProgressBar from '../component/ProgressBar';
 import AddBudgetDialog from '../component/AddBudgetDialog';
-
-
-const data = [
-    { name: 'Food', value: 9 },
-    { name: 'Gas', value: 16 },
-    { name: 'Electricity', value: 20 },
-    { name: 'Rent', value: 55 },
-];
 
 const progressValue = 20;
 
 function Dashboard() {
     const [open, setOpen] = useState(false);
     const [budgetItems, setBudgetItems] = useState([]);
+    const [chartData, setChartData] = useState([]);
 
     const hardcodedUserId = '12345'; // Hardcoded user ID for development
 
@@ -54,7 +47,9 @@ function Dashboard() {
             }
             const savedItem = await response.json();
             // Update the local state with the new item
-            setBudgetItems([...budgetItems, savedItem]);
+            const updatedItems = [...budgetItems, savedItem];
+            setBudgetItems(updatedItems);
+            updateChartData(updatedItems);
             handleClose();
         } catch (error) {
             console.error("Error adding budget item:", error);
@@ -71,6 +66,7 @@ function Dashboard() {
                 const statements = await response.json();
                 console.log( "Statements fetched successfully:" ,statements);
                 setBudgetItems(statements);
+                updateChartData(statements);
                 
             } catch (error) {
                 console.error("Error fetching statements:", error);
@@ -79,6 +75,22 @@ function Dashboard() {
 
         fetchStatements();
         }, []);
+
+    const updateChartData = (items) => {
+        const categoryTotal = items.reduce((acc, item) => {
+            const { category, type, amount } = item;
+            const value = amount;
+            acc[category] = (acc[category] || 0) + value;
+            return acc;
+        }, {});
+
+		const formattedData = Object.entries(categoryTotal).map(([category, value]) => ({
+			name: category,
+			value: value,
+		}));
+		console.log(formattedData);
+		setChartData(formattedData);
+	};
 
     return (
         <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh', maxWidth: '100%' }}>
@@ -93,21 +105,21 @@ function Dashboard() {
                                 Budget Track
                             </Typography>
                             <Box sx={{ padding: '20px', maxHeight: '200px', overflow: 'auto' }}>
-                                <List>
-                                    {budgetItems.map((item, index) => (
-                                        <ListItem key={index} disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Typography sx={{ fontWeight: 'bold' }}>{item.category}</Typography>
-                                            <Typography 
-                                                sx={{ 
-                                                    color: item.type === 'Income' ? 'green' : 'red'
-                                                }}
-                                            >
-                                                {item.type === 'Income' ? `+ $${item.amount}` : `- $${item.amount}`} 
-                                            </Typography>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Box>
+								<List>
+									{budgetItems.map((item, index) => (
+										<ListItem key={index} disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+											<Typography sx={{ fontWeight: 'bold' }}>{item.category}</Typography>
+											<Typography 
+												sx={{ 
+													color: item.type === 'Income' ? 'green' : item.type === 'Savings' ? 'blue' : 'red'
+												}}
+											>
+												{item.type === 'Income' ? `+ $${item.amount}` : item.type === 'Savings' ? `$${item.amount}` : `- $${item.amount}`} 
+											</Typography>
+										</ListItem>
+									))}
+								</List>
+							</Box>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -124,7 +136,7 @@ function Dashboard() {
                   <Typography variant="h6" gutterBottom>
                     Your Monthly Expenses
                   </Typography>
-                  <PieChart data={data} />
+                  <PieChart data={chartData} />
                 </Card>
               </Grid> 
             </Grid>
