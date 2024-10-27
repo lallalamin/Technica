@@ -1,7 +1,5 @@
-// src/dashboard/page.js
 import React, { useEffect, useState } from 'react';
 import { Grid, Card, CardContent, Typography, Button, Box, List, ListItem } from '@mui/material';
-//import { addStatement, getStatementsFromUser } from '../service/StatementsAPI'; // Import the addStatement function
 import PieChart from './piechart';
 import DailyTip from '../component/DailyTip';
 import ProgressBar from '../component/ProgressBar';
@@ -15,29 +13,26 @@ function Dashboard() {
     const [open, setOpen] = useState(false);
     const [budgetItems, setBudgetItems] = useState([]);
     const [chartData, setChartData] = useState([]);
+    const [totalIncome, setTotalIncome] = useState(0);
 
-    const hardcodedUserId = '12345'; // Hardcoded user ID for development
-	const navigate = useNavigate();
+    const hardcodedUserId = '12345';
+    const navigate = useNavigate();
 
-    // Handle opening the dialog
     const handleClickOpen = () => {
         setOpen(true);
     };
 
-    // Handle closing the dialog
     const handleClose = () => {
         setOpen(false);
     };
 
-    // Handle form submission
     const handleAddBudgetItem = async (newItem) => {
         const itemWithUserId = {
             ...newItem,
-            user_id: hardcodedUserId, // Add the hardcoded user ID
+            user_id: hardcodedUserId,
         };
 
         try {
-            // Call the API to add the new statement
             const response = await fetch(`http://localhost:5000/api/statements`, {
                 method: 'POST',
                 headers: {
@@ -49,7 +44,6 @@ function Dashboard() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const savedItem = await response.json();
-            // Update the local state with the new item
             const updatedItems = [...budgetItems, savedItem];
             setBudgetItems(updatedItems);
             updateChartData(updatedItems);
@@ -67,40 +61,80 @@ function Dashboard() {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const statements = await response.json();
-                console.log( "Statements fetched successfully:" ,statements);
+                console.log("Statements fetched successfully:", statements);
                 setBudgetItems(statements);
                 updateChartData(statements);
-                
             } catch (error) {
                 console.error("Error fetching statements:", error);
             }
         };
 
         fetchStatements();
-        }, []);
+    }, []);
 
     const updateChartData = (items) => {
-        const categoryTotal = items.reduce((acc, item) => {
-            const { category, type, amount } = item;
-            const value = amount;
-            acc[category] = (acc[category] || 0) + value;
+        // Calculate totals for each type
+        const totals = items.reduce((acc, item) => {
+            const { type, amount, category } = item;
+            if (type === 'Income') {
+                acc.totalIncome += amount;
+            } else if (type === 'Expense') {
+                // Group expenses by category
+                acc.expenses[category] = (acc.expenses[category] || 0) + amount;
+            } else if (type === 'Savings') {
+                acc.savings += amount;
+            }
             return acc;
-        }, {});
+        }, { totalIncome: 0, expenses: {}, savings: 0 });
 
-		const formattedData = Object.entries(categoryTotal).map(([category, value]) => ({
-			name: category,
-			value: value,
-		}));
-		console.log(formattedData);
-		setChartData(formattedData);
-	};
+        // Update total income state
+        setTotalIncome(totals.totalIncome);
+
+        // Convert expenses object to array format
+        const expenseData = Object.entries(totals.expenses).map(([category, amount]) => ({
+            name: `${category} (Expense)`,
+            value: amount
+        }));
+
+        // Add savings if there are any
+        if (totals.savings > 0) {
+            expenseData.push({
+                name: 'Savings',
+                value: totals.savings
+            });
+        }
+
+        // Calculate remaining income (unallocated)
+        const totalExpensesAndSavings = expenseData.reduce((sum, item) => sum + item.value, 0);
+        const remainingIncome = totals.totalIncome - totalExpensesAndSavings;
+
+        if (remainingIncome > 0) {
+            expenseData.push({
+                name: 'Remaining Income',
+                value: remainingIncome
+            });
+        }
+
+        console.log('Updated Chart Data:', expenseData);
+        setChartData(expenseData);
+    };
 
     return (
         <Box sx={{ padding: '20px', backgroundColor: '#f0f4fa', minHeight: '100vh', maxWidth: '100%' }}>
-			<Button sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px auto', backgroundColor: '#2E46CD', color: 'white', '&:hover': { backgroundColor: '#1E3AA1' } }}
-			onClick={() => navigate('/form')}>
-				<AutoAwesomeIcon sx={{ marginRight: '5px', color: 'yellow' }} /> Add Goal
-			</Button>
+            <Button 
+                sx={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    margin: '20px auto', 
+                    backgroundColor: '#2E46CD', 
+                    color: 'white', 
+                    '&:hover': { backgroundColor: '#1E3AA1' } 
+                }}
+                onClick={() => navigate('/form')}
+            >
+                <AutoAwesomeIcon sx={{ marginRight: '5px', color: 'yellow' }} /> Add Goal
+            </Button>
             <ProgressBar value={progressValue} goal={100} />
             <DailyTip />
 
@@ -112,21 +146,21 @@ function Dashboard() {
                                 Budget Track
                             </Typography>
                             <Box sx={{ padding: '20px', maxHeight: '200px', overflow: 'auto' }}>
-								<List>
-									{budgetItems.map((item, index) => (
-										<ListItem key={index} disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
-											<Typography sx={{ fontWeight: 'bold' }}>{item.category}</Typography>
-											<Typography 
-												sx={{ 
-													color: item.type === 'Income' ? 'green' : item.type === 'Savings' ? 'blue' : 'red'
-												}}
-											>
-												{item.type === 'Income' ? `+ $${item.amount}` : item.type === 'Savings' ? `$${item.amount}` : `- $${item.amount}`} 
-											</Typography>
-										</ListItem>
-									))}
-								</List>
-							</Box>
+                                <List>
+                                    {budgetItems.map((item, index) => (
+                                        <ListItem key={index} disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Typography sx={{ fontWeight: 'bold' }}>{item.category}</Typography>
+                                            <Typography 
+                                                sx={{ 
+                                                    color: item.type === 'Income' ? 'green' : item.type === 'Savings' ? 'blue' : 'red'
+                                                }}
+                                            >
+                                                {item.type === 'Income' ? `+ $${item.amount}` : item.type === 'Savings' ? `$${item.amount}` : `- $${item.amount}`} 
+                                            </Typography>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Box>
                             <Button
                                 variant="contained"
                                 color="primary"
@@ -138,17 +172,32 @@ function Dashboard() {
                         </CardContent>
                     </Card>
                 </Grid>
-               <Grid item xs={12} md={6}>
-                <Card sx={{ padding: '20px', textAlign: 'center', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
-                  <Typography variant="h6" gutterBottom>
-                    Your Monthly Expenses
-                  </Typography>
-                  <PieChart data={chartData} />
-                </Card>
-              </Grid> 
+                <Grid item xs={12} md={6}>
+                    <Card sx={{ padding: '20px', textAlign: 'center', boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)' }}>
+                        <Typography variant="h6" gutterBottom>
+                            Your Monthly Budget Distribution
+                        </Typography>
+                        <Box sx={{ 
+                            backgroundColor: '#f5f5f5', 
+                            padding: '10px', 
+                            borderRadius: '8px',
+                            marginBottom: '20px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '10px'
+                        }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
+                                Total Income This Month:
+                            </Typography>
+                            <Typography variant="h6" sx={{ color: 'green' }}>
+                                ${totalIncome.toLocaleString()}
+                            </Typography>
+                        </Box>
+                        <PieChart data={chartData} />
+                    </Card>
+                </Grid> 
             </Grid>
-            {/* D3 Pie Chart Section */}
-            
 
             <AddBudgetDialog open={open} onClose={handleClose} onSubmit={handleAddBudgetItem} />
         </Box>
