@@ -8,7 +8,7 @@ const handleResponse = async (response) => {
 
   const baseUrl = "http://localhost:3000"
   
-  export const getStatementsFromUser = async () => {
+  export const getStatementsFromUser = async (user_id) => {
     try {
       const response = await fetch(`${baseUrl}/api/statements/${user_id}`);
       return handleResponse(response);
@@ -18,32 +18,32 @@ const handleResponse = async (response) => {
     }
   };
   
-  export const getStatementsFromUserAndType = async (id) => {
+  export const getStatementsFromUserAndType = async (user_id, type) => {
     try {
       const response = await fetch(`${baseUrl}/api/statements/${user_id}/${type}`);
       return handleResponse(response);
     } catch (error) {
-      console.error(`Error fetching statement with ID ${id}:`, error);
+      console.error(`Error fetching statement with ID ${user_id}:`, error);
       throw error;
     }
   };
 
-  export const getStatementsFromUserInAMonth = async (id) => {
+  export const getStatementsFromUserInAMonth = async (user_id) => {
     try {
       const response = await fetch(`${baseUrl}/api/statements/${user_id}/month`);
       return handleResponse(response);
     } catch (error) {
-      console.error(`Error fetching statement with ID ${id}:`, error);
+      console.error(`Error fetching statement with ID ${user_id}:`, error);
       throw error;
     }
   };
 
-  export const getStatementsFromUserAndTypeInAMonth = async (id) => {
+  export const getStatementsFromUserAndTypeInAMonth = async (user_id, type) => {
     try {
       const response = await fetch(`${baseUrl}/api/statements/${user_id}/${type}/month`);
       return handleResponse(response);
     } catch (error) {
-      console.error(`Error fetching statement with ID ${id}:`, error);
+      console.error(`Error fetching statement with ID ${user_id}:`, error);
       throw error;
     }
   };
@@ -64,9 +64,9 @@ const handleResponse = async (response) => {
     }
   };
   
-  export const updateStatement = async (id, statementData) => {
+  export const updateStatement = async (user_id, statementData) => {
     try {
-      const response = await fetch(`${baseUrl}/api/statement/${id}`, {
+      const response = await fetch(`${baseUrl}/api/statement/${user_id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -75,19 +75,19 @@ const handleResponse = async (response) => {
       });
       return handleResponse(response);
     } catch (error) {
-      console.error(`Error updating statement with ID ${id}:`, error);
+      console.error(`Error updating statement with ID ${user_id}:`, error);
       throw error;
     }
   };
   
-  export const delecteStatement = async (id) => {
+  export const delecteStatement = async (user_id) => {
     try {
-      const response = await fetch(`${baseUrl}/api/statement/${id}`, {
+      const response = await fetch(`${baseUrl}/api/statement/${user_id}`, {
         method: "DELETE",
       });
       return handleResponse(response);
     } catch (error) {
-      console.error(`Error deleting statement with ID ${id}:`, error);
+      console.error(`Error deleting statement with ID ${user_id}:`, error);
       throw error;
     }
   };
